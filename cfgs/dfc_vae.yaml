@@ -1,0 +1,54 @@
+model:
+  name: "dfc_vae"
+  mode: "train"
+  device: "cuda:0"
+  seed: 123
+  resume: False
+  resume_force_LR: False
+  loadckpt: None
+architecture:
+  in_channels: 1
+  latent_dim: 128
+  hidden_dims: "32,64,128,256,512"
+  kernels_dims: "3,3,3,3,3"
+  stride: "2,2,2,2,2"
+  padding: "1,1,1,1,1"
+  feat_model: "vgg19"
+  feat_layers: "2,5,9,12,16,19,22,25,29,32,35,38,42,45,48,51:0" # all ReLu
+  # feat_layers: "0,3,7,10,14,17,20,23,27,30,33,36,40,43,46,49:0" # all Conv2D
+  # feat_layers: "0,10,20,30,40,49" # Conv2D
+  # feat_layers: "6,13,26,39,52" # MaxPool
+  kld_weight: 0.005
+  KLD_Loss_threshold: 500
+  KLD_Loss_dims: "all"      # either "all" or "70,73,118:" (must end with ":")
+  alpha_recons_loss: 1
+  beta_feat_loss: 10
+dataset:
+  datapath: "data"
+  dataset_name: "HSC-SSP_DR4_james"
+  cand_list_all: "candidates_list_raw.txt"
+  cand_list_anomalies: "candidates_list_selected.txt"
+  testtrain_split: 0.2
+  fixinbalance: False
+  augmentation: 0.0
+  img_resize: 64
+  pin_m: True
+  workers: 8
+training:
+  max_epochs: 10
+  lr: 0.001
+  lr_scheduler: 'MS'
+  lrepochs: "2,3,4,5:1.2"
+  wd: 0.0
+  batch_size: 64
+logging:
+  logdir: "./outputs/debug"
+  summary_freq: 20
+  save_freq: 1
+  eval_freq: 1
+debug:
+  debug: 0
+  hist_plots: True
+  tSNE_plots: True 
+  latent_boxplots: True
+  metrics_plots: True

@@ -1,0 +1,9 @@
+data/
+outputs/
+outputs_old/
+logs/
+
+.python-version
+__pycache__/
+
+lena.png

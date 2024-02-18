@@ -1,0 +1,43 @@
+model:
+  name: "resnet18_vae"
+  mode: "train"
+  device: "cuda:0"
+  seed: 123
+  resume: False
+  resume_force_LR: False
+  loadckpt: None
+architecture:
+  in_channels: 1
+  latent_dim: 128
+  kld_weight: 0.005
+  KLD_Loss_threshold: 500
+  KLD_Loss_dims: "all"      # either "all" or "70,73,118:" (must end with ":")
+dataset:
+  datapath: "data"
+  dataset_name: "HSC-SSP_DR4_james"
+  cand_list_all: "candidates_list_raw.txt"
+  cand_list_anomalies: "candidates_list_selected.txt"
+  testtrain_split: 0.2
+  fixinbalance: False
+  augmentation: 0.0
+  img_resize: 64
+  pin_m: True
+  workers: 8
+training:
+  max_epochs: 10
+  lr: 0.001
+  lr_scheduler: 'MS'
+  lrepochs: "2,3,4,5,6,7,8,9:1.2"
+  wd: 0.0
+  batch_size: 64
+logging:
+  logdir: "./outputs/debug"
+  summary_freq: 50
+  save_freq: 1
+  eval_freq: 1
+debug:
+  debug: 0
+  hist_plots: True
+  tSNE_plots: True 
+  latent_boxplots: True
+  metrics_plots: True

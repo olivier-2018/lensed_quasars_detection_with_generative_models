@@ -1,0 +1,455 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "local file",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "SVDD-VAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/svdd_vae.yaml",
+                    "logging.logdir", "./outputs/debug_svdd_vae_aug",
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.svdd_flag", "False",
+                    "architecture.mu_shift", "0.0",
+                    "architecture.mu_shift_dims", "88,51,92,18,58,75,76,80:0",
+                    "training.max_epochs", "15",
+                    "training.batch_size", "64",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "SVDD-VAE AD analysis",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/svdd_vae.yaml",
+                    "model.mode", "AD_analysis",
+                    "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_noSVDD/model_39.ckpt",
+                    // "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_SVDD/model_39.ckpt",
+                    // "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_noSVDD_Mu+5/model_39.ckpt",
+                    // "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_noSVDD_Mu+5_8dims/model_39.ckpt",
+                    "architecture.svdd_flag", "False",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    "debug.hist_plots", "False",
+                    "debug.latent_boxplots", "False",
+                    "debug.metrics_plots", "False",                    
+                    "debug.tSNE_plots", "False",
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "SVDD-VAE AD classification",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/svdd_vae.yaml",
+                    "model.mode", "anomaly_classification",
+                    // "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_noSVDD/model_39.ckpt",
+                    "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_SVDD/model_39.ckpt",
+                    // "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_noSVDD_Mu+5/model_39.ckpt",
+                    // "model.loadckpt", "./outputs/SVDDVAE_split0.2_Dim128_KLw0.005_noSVDD_Mu+5_8dims/model_39.ckpt",
+                    "architecture.svdd_flag", "True",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    "logging.summary_freq", "10", 
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "DFC-VAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/dfc_vae.yaml",
+                    "logging.logdir", "./outputs/debug_dfcvae",
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "training.max_epochs", "15",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.feat_model", "vgg19",
+                    "architecture.feat_layers", "2,5,9,12,16,19,22,25,29,32,35,38,42,45,48,51:0",
+                    "training.batch_size", "32",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "DFC-VAE AD analysis",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/dfc_vae.yaml",
+                    "model.mode", "AD_analysis",
+                    "model.loadckpt", "./outputs/DFCVAE_split0.2_Dim128_KLw0.005_vgg19ReLu/model_39.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    // "debug.hist_plots", "False",
+                    // "debug.latent_boxplots", "False",
+                    // "debug.metrics_plots", "False",                    
+                    // "debug.tSNE_plots", "False",
+                    // "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "DFC-VAE AD classification",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/dfc_vae.yaml",
+                    "model.mode", "anomaly_classification",
+                    "model.loadckpt", "./outputs/DFCVAE_split0.2_Dim128_KLw0.005_vgg19ReLu/model_39.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    "logging.summary_freq", "10", 
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "ResNet18-VAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/resnet18_vae.yaml",
+                    // "dataset.dataset_name", "STL10",
+                    // "dataset.dataset_name", "CelebA",
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "logging.logdir", "./outputs/debug_resnet18vae",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.max_epochs", "10",
+                    "training.batch_size", "64",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "ResNet18-VAE AD analysis",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/resnet18_vae.yaml",
+                    "model.mode", "AD_analysis",
+                    "model.loadckpt", "./outputs/RESNET18VAE_split0.2_Dim128_KLw0.005/model_44.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "475",
+                    "training.batch_size", "256",
+                    "debug.hist_plots", "False",
+                    "debug.latent_boxplots", "False",
+                    // "debug.metrics_plots", "False",                    
+                    "debug.tSNE_plots", "False",
+                    // "debug.debug", "0"
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "ResNet18-VAE AD classification",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/resnet18_vae.yaml",
+                    "model.mode", "anomaly_classification",
+                    "model.loadckpt", "./outputs/RESNET18VAE_split0.2_Dim128_KLw0.005/model_44.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "475",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    "logging.summary_freq", "10", 
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "BetaTC-VAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/betatc_vae.yaml",
+                    // "dataset.dataset_name", "CelebA",
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "logging.logdir", "./outputs/debug_betatcvae",
+                    "training.max_epochs", "15",
+                    "architecture.latent_dim", "128",
+                    "architecture.kld_weight", "0.005",
+                    "architecture.KLD_Loss_threshold", "0.6",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.anneal_steps", "200",
+                    "architecture.alpha_mi_loss", "0.01",
+                    "architecture.beta_tc_loss", "0.02",
+                    "training.batch_size", "64",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "BetaTC-VAE AD analysis ",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/betatc_vae.yaml",
+                    "model.mode", "AD_analysis",
+                    // "model.loadckpt", "./outputs/debug_betatcvae/model_06.ckpt",
+                    // "model.loadckpt", "./outputs/BETATCVAE_split0.2_Dim128_KLw0.005/model_49.ckpt",
+                    // "model.loadckpt", "./outputs/BETATCVAE_split0.2_Dim32_KLw0.005/model_49.ckpt",
+                    "model.loadckpt", "./outputs/BETATCVAE_split0.2_Dim128_KLw0.01_MI0.01_TC0.02/model_44.ckpt",
+                    // "model.loadckpt", "./outputs/BETATCVAE_split0.2_Dim128_KLw0.01_MI0.01_TC0.02_neg/model_49.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "0.6",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    // "debug.hist_plots", "False",
+                    // "debug.latent_boxplots", "False",
+                    // "debug.metrics_plots", "False",                    
+                    // "debug.tSNE_plots", "False",
+                    // "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "BetaTC-VAE AD classification",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/betatc_vae.yaml",
+                    "model.mode", "anomaly_classification",
+                    "model.loadckpt", "./outputs/BETATCVAE_split0.2_Dim128_KLw0.01_MI0.01_TC0.02/model_44.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "0.6",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "256",
+                    "logging.summary_freq", "10", 
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "ResNet18-BetaTC-VAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/resnet18_betatc_vae.yaml",
+                    // "dataset.dataset_name", "STL10",
+                    // "dataset.dataset_name", "CelebA",
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "logging.logdir", "./outputs/debug_ResNet18BTC",
+                    "architecture.latent_dim", "128",
+                    "architecture.kld_weight", "0.001",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.anneal_steps", "200",
+                    "architecture.alpha_mi_loss", "0.01",
+                    "architecture.beta_tc_loss", "0.05",
+                    "training.batch_size", "64",
+                    "training.max_epochs", "10",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "ResNet18-BetaTC-VAE AD analysis ",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/resnet18_betatc_vae.yaml",
+                    "model.mode", "AD_analysis",                    
+                    // "model.loadckpt", "./outputs/RESNET18VAE_BETATCVAE_split0.2_Dim128_KLw0.001_MI0.01_TC0.02/model_49.ckpt",
+                    "model.loadckpt", "./outputs/RESNET18VAE_BETATCVAE_split0.2_Dim128_KLw0.001_MI0.01_TC0.02_bal_aug0.8/model_74.ckpt",
+                    // "model.loadckpt", "./outputs/RESNET18VAE_BETATCVAE_split0.2_Dim128_KLw0.001_MI0.01_TC0.02_bal_aug0.8_old/model_74.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "0.3",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "training.batch_size", "512",
+                    // "debug.hist_plots", "False",
+                    "debug.latent_boxplots", "False",
+                    // "debug.metrics_plots", "False",                    
+                    "debug.tSNE_plots", "False",
+                    // "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "ResNet18-BetaTC-VAE AD classification",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/resnet18_betatc_vae.yaml",
+                    "model.mode", "anomaly_classification",
+                    // "model.loadckpt", "./outputs/RESNET18VAE_BETATCVAE_split0.2_Dim128_KLw0.001_MI0.01_TC0.02/model_49.ckpt",  // 9,22,27,70,73,118
+                    "model.loadckpt", "./outputs/RESNET18VAE_BETATCVAE_split0.2_Dim128_KLw0.001_MI0.01_TC0.02_bal_aug0.8/model_74.ckpt",  // 14,22,44,75,104
+                    // "model.loadckpt", "./outputs/RESNET18VAE_BETATCVAE_split0.2_Dim128_KLw0.001_MI0.01_TC0.02_bal_aug0.8_old/model_74.ckpt",   // 10,15,55,65,85,97,121,126
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "0.55",
+                    "architecture.KLD_Loss_dims", "14,22,44,75,104:",    // either "all" or list of dims (must end with ":") 
+                    "training.batch_size", "512",
+                    "logging.summary_freq", "10", 
+                    "debug.debug", "0"
+                    ]
+        },
+        {
+            "name": "Unsupervised GMVAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/unsup_gmvae.yaml",
+                    // "dataset.dataset_name", "STL10", # 96x96 but not good, to few training samples
+                    // "dataset.dataset_name", "CIFAR10", # 32x32
+                    // "dataset.dataset_name", "CelebA",
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "logging.logdir", "./outputs/debug_ugmvae",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.kld_weight", "0.001",
+                    "architecture.Nclusters", "10",
+                    "training.max_epochs", "10",
+                    "training.batch_size", "64",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "GMM-VAE AD analysis",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/unsup_gmvae.yaml",
+                    "model.mode", "AD_analysis",
+                    // "model.loadckpt", "./outputs/debug_gmmvae/model_09.ckpt",
+                    // "model.loadckpt", "./outputs/GMVAE_split0.2_Dim128_KLw5_N10/model_49.ckpt",
+                    "model.loadckpt", "./outputs/GMVAE_split0.2_Dim32_KLw1_N5/model_49.ckpt",
+                    "architecture.latent_dim", "32",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.Nclusters", "5",
+                    "training.batch_size", "256",
+                    // "debug.hist_plots", "False",
+                    // "debug.tSNE_plots", "False",
+                    // "debug.latent_boxplots", "False",
+                    "debug.debug", "0",
+                    "postpro.cluster", "2"
+                    ]
+        },
+        {
+            "name": "SemiSupervised GMVAE Training",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/semisup_gmvae.yaml",
+                    // "dataset.dataset_name", "STL10", # STL not good, to few training samples
+                    "dataset.dataset_name", "CIFAR10",
+                    // "dataset.dataset_name", "CelebA", // used with only 1 attribute (Gender, smile, etc) see model
+                    // "dataset.celeba_attr", "20", // Ex: 5_o_Clock_Shadow(0) Arched_Eyebrows(1) Attractive(2) ... Bald(4) ... Big_Nose(7) ... Eyeglasses(15) ...  Male(20) ...  Smiling(31) 
+                    "dataset.fixinbalance", "True",
+                    "dataset.augmentation", "0.8",
+                    "logging.logdir", "./outputs/debug_semisup_gmVAE",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.kld_weight", "0.01",
+                    "architecture.Nclusters", "10",
+                    "training.max_epochs", "15",
+                    "training.lrepochs", "2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30:1.1",
+                    "training.batch_size", "64",
+                    "debug.debug", "0",
+                    ]
+        },
+        {
+            "name": "SemiSupervised GMVAE AD analysis ",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true, 
+            "args":[
+                    "--config=cfgs/semisup_gmvae.yaml",
+                    "model.mode", "AD_analysis",
+                    "model.loadckpt", "./outputs/debug_semisup_gmVAE/model_09.ckpt",
+                    "architecture.latent_dim", "128",
+                    "architecture.KLD_Loss_threshold", "500",
+                    "architecture.KLD_Loss_dims", "all",     // either "all" or list of dims (must end with ":")
+                    "architecture.Nclusters", "2",
+                    "training.batch_size", "256",
+                    // "debug.hist_plots", "False",
+                    // "debug.tSNE_plots", "False",
+                    // "debug.latent_boxplots", "False",
+                    "debug.debug", "0",
+                    "postpro.cluster", "0"
+                    ]
+        },
+    ]
+}
